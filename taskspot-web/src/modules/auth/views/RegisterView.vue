@@ -47,6 +47,7 @@ const submitForm = async () => {
         <button :disabled="authStore.loading">
           {{ authStore.loading ? 'Inscription...' : "s'incrire" }}
         </button>
+      <p style="margin-top: 10px;">Avez vous déjà un compte ? <a href="/auth/login">Se connecter</a></p>
       </form>
     </div>
   </div>

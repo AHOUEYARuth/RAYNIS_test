@@ -43,6 +43,7 @@ const submitForm = async () => {
       <button :disabled="authStore.loading">
         {{ authStore.loading ? 'Connexion...' : 'Se connecter' }}
       </button>
+      <p style="margin-top: 10px;">Nouveau sur TaskSpot? <a href="/auth/register">Créez un compte</a></p>
     </form>
     </div>
   </div>
