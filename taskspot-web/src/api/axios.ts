@@ -1,0 +1,75 @@
+import axios from "axios";
+
+const api = axios.create({
+    baseURL: "http://localhost:3333/api",
+    headers: {
+        'Content-Type': 'application/json',
+    }
+})
+
+api.interceptors.request.use((config) => {
+    const token = localStorage.getItem('token')
+    if (token) {
+    config.headers.Authorization = `Bearer ${token}`
+  }
+  return config
+})
+
+export default api
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    const authStore = useAuthStore()
+
+    if (error.response?.status === 401) {
+      authStore.logout()
+
+      // éviter boucle infinie
+      if (router.currentRoute.value.path !== '/login') {
+        router.push('/login')
+      }
+    }
+
+    return Promise.reject(error)
+  }
+)
+ */
