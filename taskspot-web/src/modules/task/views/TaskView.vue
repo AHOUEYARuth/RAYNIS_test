@@ -47,7 +47,6 @@ const cancelDelete = () => {
   taskToDelete.value = null
 }
 </script>
-
 <template>
   <div class="task-section">
     <div class="content">
@@ -62,8 +61,11 @@ const cancelDelete = () => {
                 <h3>{{ task.title }}</h3>
                 <p>{{ task.description }}</p>
                 <div class="actions">
-                  <button class="edit">Modifier</button>
-                  <button class="del" @click="confirmDelete(task.id)">Supprimer</button>
+                  <div>
+                    <button class="edit">Modifier</button>
+                    <button class="del" @click="confirmDelete(task.id)">Supprimer</button>
+                  </div>
+                  <p :class="task.status === 'validate' ? 'text-green' : task.status === 'pending' ? 'text-blue' : 'text-red'">{{ task.status === 'validate' ? 'Validé' : task.status === 'pending' ?  "En cours"  : "Annulé"}}</p>
                 </div>
               </div>
             </div>
@@ -129,6 +131,7 @@ const cancelDelete = () => {
   justify-content: center;
   align-items: start;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  pointer-events: all;
 }
 .form_section {
   width: 30%;
@@ -136,6 +139,7 @@ const cancelDelete = () => {
   background-color: #fff;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
   text-align: center;
+  pointer-events: all;
 }
 .btn {
   width: 100%;
@@ -187,6 +191,7 @@ const cancelDelete = () => {
 .edit {
   background-color: #037575;
   color: #fff;
+  margin-right: 10px;
 }
 .del {
   background-color: #f44336;
@@ -278,6 +283,7 @@ const cancelDelete = () => {
   align-items: center;
   justify-content: center;
   z-index: 1000;
+  pointer-events: all;
 }
 
 .modal-content {
@@ -287,6 +293,7 @@ const cancelDelete = () => {
   min-width: 400px;
   max-width: 500px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: all;
 }
 
 .modal-header {
@@ -352,5 +359,18 @@ const cancelDelete = () => {
   background: #d32f2f;
   transform: translateY(-1px);
   box-shadow: 0 2px 8px rgba(244, 67, 54, 0.3);
+}.text-green {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.text-blue {
+  color: #2196F3;
+  font-weight: 600;
+}
+
+.text-red {
+  color: #f44336;
+  font-weight: 600;
 }
 </style>

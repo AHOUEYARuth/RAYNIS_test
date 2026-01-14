@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { useTaskStore } from '@/modules/task/taskStore'
+import type { Task } from '@/modules/task/taskType'
 import { ref, onMounted } from 'vue'
-import { GoogleMap, AdvancedMarker } from 'vue3-google-map'
+import { GoogleMap, InfoWindow, Marker } from 'vue3-google-map'
 
 const center = ref({ lat: 6.3703, lng: 2.3912 })
 const taskStore = useTaskStore()
@@ -9,6 +10,15 @@ const taskStore = useTaskStore()
 onMounted(async () => {
   await taskStore.taskList()
 })
+const selectedTask = ref<Task | null>(null)
+
+const openInfoWindow = (task: Task) => {
+  selectedTask.value = task
+}
+
+const closeInfoWindow = () => {
+  selectedTask.value = null
+}
 </script>
 <template>
   <div class="map-container">
@@ -17,32 +27,32 @@ onMounted(async () => {
       :libraries="['marker']"
       :center="center"
       :zoom="12"
-      style="width: 100%; height: 500px"
+      style="width: 100%; height: 100vh"
     >
-      <AdvancedMarker
+      <Marker
         v-for="task in taskStore.tasks"
         :key="task.id"
-        :options="{
-          position: {
-            lat: parseFloat(task.latitude),
-            lng: parseFloat(task.longitude),
-          },
-        }"
-      >
-        <div class="task-marker">
-          <div class="marker-content">
-            <h4>{{ task.title }}</h4>
-            <p>{{ task.description }}</p>
-          </div>
-        </div>
-      </AdvancedMarker>
+        :options="{ position: { lat: task.latitude, lng: task.longitude }, title: task.title }"
+         @click="openInfoWindow(task)"
+      />
+       <InfoWindow
+      v-if="selectedTask"
+      :options="{
+        position: { lat: selectedTask.latitude, lng: selectedTask.longitude }
+      }"
+      @closeclick="closeInfoWindow"
+    >
+      <div class="info-window">
+        <h4 style="font-weight: 600;">{{ selectedTask.title }}</h4>
+        <p>{{ selectedTask.description }}</p>
+      </div>
+    </InfoWindow>
+      <div class="default-layout">
+        <main>
+          <router-view />
+        </main>
+      </div>
     </GoogleMap>
-  </div>
-
-  <div class="default-layout">
-    <main>
-      <router-view />
-    </main>
   </div>
 </template>
 
@@ -50,6 +60,8 @@ onMounted(async () => {
 .map-container {
   width: 100%;
   margin-bottom: 20px;
+  z-index: 11;
+  
 }
 
 .task-marker {
@@ -79,15 +91,31 @@ onMounted(async () => {
 }
 
 .default-layout {
-  width: 100%;  
+  width: 100%;
   height: 100vh;
   padding: 0 auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10;
+  pointer-events: none;
 }
 
 main {
   width: 95%;
   height: 100%;
-  background-color: #f5f5f5;
+  /* background-color: #f5f5f5; */
   margin: 0 auto;
+}
+.info-window h4 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.info-window p {
+  margin: 0;
+  color: #666;
+  font-size: 14px;
 }
 </style>

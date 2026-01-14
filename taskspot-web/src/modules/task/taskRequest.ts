@@ -1,12 +1,12 @@
 import api from "@/api/axios"
-import type { Task } from "./taskType"
+import type { TaskPayload } from "./taskType"
 
 export const taskRequest = {
-    create(data: Task){
+    create(data: TaskPayload){
         return api.post('/tasks', data)
     },
 
-    update(data: Task, id:number){
+    update(data: TaskPayload, id:number){
         return api.post(`/tasks/${id}`, data)
     },
 

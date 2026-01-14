@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Task } from "./taskType";
+import type { Task, TaskPayload } from "./taskType";
 import { taskRequest } from "./taskRequest";
 
 
@@ -17,14 +17,14 @@ export const useTaskStore = defineStore("task", {
             this.error = null
         },
 
-        async createTask(payload: Task){
+        async createTask(payload: TaskPayload){
             try {
                 this.loading = true
                 this.clearMessages()
                 const {data} = await taskRequest.create(payload)
                 this.message = data.message || 'Tâche créée avec succès'
             } catch (error: any) {
-                this.error = error?.response?.data?.message || "Une erreur est survenue lors de la création de la tâche"
+                this.error = error?.response?.data?.message.message || "Une erreur est survenue lors de la création de la tâche"
             }finally{
                 this.loading = false
             }
